@@ -4,10 +4,6 @@ const nextConfig = {
   images: {
     domains: [],
   },
-  // Improve font loading reliability
-  experimental: {
-    optimizeFonts: true,
-  },
 }
 
 module.exports = nextConfig

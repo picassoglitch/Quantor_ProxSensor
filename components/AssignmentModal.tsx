@@ -60,7 +60,7 @@ export default function AssignmentModal({ isOpen, onClose, onSuccess }: Assignme
         .insert({
           client_id: selectedClient,
           store_id: selectedStore,
-        })
+        } as any)
 
       if (insertError) throw insertError
 

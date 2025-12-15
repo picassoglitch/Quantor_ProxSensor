@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (profile?.role !== 'admin') {
+    if ((profile as any)?.role !== 'admin') {
       return NextResponse.json({ error: 'Forbidden: Admin only' }, { status: 403 })
     }
 
@@ -124,7 +124,7 @@ export async function PUT(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (profile?.role !== 'admin') {
+    if ((profile as any)?.role !== 'admin') {
       return NextResponse.json({ error: 'Forbidden: Admin only' }, { status: 403 })
     }
 
@@ -144,7 +144,7 @@ export async function PUT(request: NextRequest) {
     if (Object.keys(updateData).length > 0) {
       const { error: profileError } = await supabaseAdmin
         .from('profiles')
-        .update(updateData)
+        .update(updateData as any)
         .eq('id', user_id)
 
       if (profileError) {

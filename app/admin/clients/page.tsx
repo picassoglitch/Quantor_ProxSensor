@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase-client'
 import { User } from '@/lib/types'
 import { ArrowLeft, Users, Eye, Building2 } from 'lucide-react'
 import Link from 'next/link'
-import Dashboard from '@/app/page'
+import Dashboard from '@/components/Dashboard'
 
 export default function AdminClientsView() {
   const router = useRouter()
@@ -106,7 +106,7 @@ export default function AdminClientsView() {
           </div>
         </header>
         {/* Render dashboard filtered by this client */}
-        <Dashboard clientId={selectedClientId} />
+        <Dashboard clientId={selectedClientId || undefined} />
       </div>
     )
   }

@@ -1,200 +1,108 @@
-# TBM Sensor Dashboard - People Counting SaaS
+# Quantor Prox - WiFi People Counter Dashboard
 
-A modern, real-time people counting dashboard built with Next.js 14, TypeScript, and Supabase. Track device detections, analyze foot traffic, and monitor visitor patterns with beautiful visualizations.
+Sistema completo de conteo de personas mediante detección WiFi con dashboard de analíticas en tiempo real, desarrollado por Quantor.
 
-## Features
+## 🚀 Características
 
-- 🔴 **Real-time Updates** - Live data via Supabase Realtime subscriptions
-- 📊 **Advanced Analytics** - Peak hours, heatmaps, dwell time, unique visitors
-- 📍 **Multi-Location Support** - Track multiple sensors across different locations
-- 📱 **Mobile Responsive** - Beautiful UI that works on all devices
-- 🌙 **Dark Mode** - Toggle between light and dark themes
-- ⚡ **Fast Performance** - Server-side data fetching + client-side realtime
-- 🎨 **Modern Design** - Professional SaaS look inspired by Placer.ai and Shopify Analytics
+- **Detección WiFi Pasiva**: Detecta dispositivos móviles mediante WiFi sniffer (ESP32)
+- **Dashboard en Tiempo Real**: Visualización de métricas de tráfico y engagement
+- **Panel de Administración**: Gestión de usuarios, clientes, tiendas y asignaciones
+- **Multi-tenant**: Soporte para múltiples clientes con aislamiento de datos
+- **Fingerprinting Avanzado**: Identificación de dispositivos incluso con MAC randomization
+- **Analíticas de Marketing**: KPIs, insights y exportación de reportes
 
-## Tech Stack
+## 📋 Requisitos
 
-- **Next.js 14** - App Router with React Server Components
-- **TypeScript** - Full type safety
-- **Tailwind CSS** - Utility-first styling
-- **Supabase** - Database and real-time subscriptions
-- **Recharts** - Beautiful, responsive charts
-- **Lucide Icons** - Modern icon library
+- Node.js 18+ 
+- Supabase (Base de datos y autenticación)
+- ESP32 (C6, C3 o S3) para sensores
 
-## Getting Started
+## 🛠️ Instalación
 
-### Prerequisites
-
-- Node.js 18+ installed
-- Supabase project with `detections` table
-- ESP32-C6 sensors sending data to Supabase
-
-### Installation
-
-1. **Clone the repository**
+1. **Clonar el repositorio**
    ```bash
-   git clone <your-repo-url>
-   cd tbm-sensor-dashboard
+   git clone https://github.com/tu-usuario/Quantor_Prox.git
+   cd Quantor_Prox
    ```
 
-2. **Install dependencies**
+2. **Instalar dependencias**
    ```bash
    npm install
    ```
 
-3. **Configure Supabase**
+3. **Configurar variables de entorno**
+   ```bash
+   cp .env.example .env.local
+   ```
    
-   The Supabase URL and anon key are already configured in `lib/supabase.ts`. If you need to change them:
-   ```typescript
-   const supabaseUrl = 'https://your-project.supabase.co'
-   const supabaseAnonKey = 'your-anon-key'
+   Editar `.env.local` con tus credenciales de Supabase:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=tu_url_supabase
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key
    ```
 
-4. **Run the development server**
+4. **Configurar base de datos**
+   - Ejecutar `database-schema.sql` en Supabase SQL Editor
+   - Configurar políticas RLS según tus necesidades
+
+5. **Ejecutar en desarrollo**
    ```bash
    npm run dev
    ```
 
-5. **Open your browser**
-   
-   Navigate to [http://localhost:3000](http://localhost:3000)
+## 📁 Estructura del Proyecto
 
-## Database Schema
-
-The dashboard expects a `detections` table with the following structure:
-
-```sql
-CREATE TABLE detections (
-  id bigint PRIMARY KEY,
-  sensor_id text,
-  location text,
-  wifi_rssi integer,
-  devices jsonb[],  -- Array of: {mac, fp, rssi, peak_rssi, duration, packets, distance_m}
-  created_at timestamptz
-);
+```
+Quantor_Prox/
+├── app/                    # Next.js App Router
+│   ├── admin/              # Panel de administración
+│   ├── auth/               # Autenticación
+│   ├── dashboard/          # Dashboard de clientes
+│   └── profile/            # Perfil de usuario
+├── components/             # Componentes React
+├── lib/                    # Utilidades y clientes
+├── quantor_Sensor/         # Código del sensor ESP32
+└── database-schema.sql      # Esquema de base de datos
 ```
 
-## Features Overview
+## 🔧 Configuración del Sensor ESP32
 
-### Live People Count
-- Real-time count of devices detected in the last 30 seconds
-- Updates automatically via Supabase Realtime
-- Visual pulse animation on count changes
+1. Abrir `quantor_Sensor/quantor_Sensor.ino` en Arduino IDE
+2. Configurar credenciales WiFi y Supabase
+3. Subir al ESP32
 
-### Statistics Cards
-- **Unique Visitors Today** - Count of unique MAC addresses today
-- **This Week** - Unique visitors in the last 7 days
-- **This Month** - Unique visitors in the last 30 days
-- **Average Dwell Time** - Average time devices stay in range (in minutes)
+Ver `quantor_Sensor/quantor_Sensor.ino` para más detalles.
 
-### Peak Hour Chart
-- Bar chart showing hourly distribution of detections
-- Highlights the peak hour with highest activity
-- Updates based on selected date range
+## 👥 Roles de Usuario
 
-### Activity Heatmap
-- 7-day heatmap showing activity by day and hour
-- Color intensity indicates detection volume
-- Hover tooltips show exact counts
+- **Admin**: Acceso completo, gestión de usuarios y clientes
+- **Cliente**: Vista limitada a sus tiendas asignadas
 
-### Activity Feed
-- Live feed of recent device detections
-- Shows MAC address, location, distance, and timestamp
-- Auto-updates with new detections
+## 📊 Dashboard
 
-## Dashboard Controls
+El dashboard incluye:
+- KPIs en tiempo real (Visitantes, Retorno, Dwell Time)
+- Gráficos de tráfico y engagement
+- Segmentación de audiencia
+- Tabla de actividad reciente
+- Exportación CSV/PDF
 
-### Location Filter
-- Select specific location or view all locations
-- Auto-detects all locations from database
+## 🔐 Seguridad
 
-### Date Range
-- **Today** - Current day's data
-- **Yesterday** - Previous day's data
-- **7 Days** - Last 7 days
-- **30 Days** - Last 30 days
+- Autenticación mediante Supabase Auth
+- Row Level Security (RLS) para aislamiento de datos
+- Políticas de acceso basadas en roles
+- API keys protegidas en variables de entorno
 
-### Dark Mode
-- Toggle between light and dark themes
-- Preference persists across sessions
+## 📝 Licencia
 
-## Deployment
+Copyright © 2025 Quantor. Todos los derechos reservados.
 
-### Vercel (Recommended)
+## 🤝 Soporte
 
-1. Push your code to GitHub
-2. Import project in Vercel
-3. Vercel will auto-detect Next.js
-4. Deploy!
-
-The dashboard will work out of the box with your Supabase project.
-
-### Other Platforms
-
-The dashboard can be deployed to any platform that supports Next.js:
-- Netlify
-- AWS Amplify
-- Railway
-- DigitalOcean App Platform
-
-## Performance
-
-- **Server-side data fetching** for initial load
-- **Real-time subscriptions** for live updates
-- **Optimized queries** with proper indexing
-- **Lazy loading** for charts and components
-- **Responsive images** and assets
-
-## Security
-
-- Uses Supabase Row Level Security (RLS)
-- Public anon key for read-only access
-- No sensitive data exposed
-- CORS configured via Supabase
-
-## Customization
-
-### Styling
-- Modify `tailwind.config.ts` for theme colors
-- Update `app/globals.css` for global styles
-- Components use Tailwind utility classes
-
-### Charts
-- Recharts components in `components/PeakHourChart.tsx` and `components/HeatmapChart.tsx`
-- Customize colors, labels, and tooltips
-
-### Data Processing
-- Modify `calculateStats()` in `app/page.tsx` for custom metrics
-- Add new API routes in `app/api/` for server-side processing
-
-## Troubleshooting
-
-### No data showing
-- Check Supabase connection in `lib/supabase.ts`
-- Verify `detections` table exists and has data
-- Check browser console for errors
-
-### Real-time not working
-- Ensure Supabase Realtime is enabled for the `detections` table
-- Check network tab for WebSocket connections
-- Verify RLS policies allow read access
-
-### Charts not rendering
-- Check that Recharts is installed: `npm install recharts`
-- Verify data format matches expected structure
-- Check browser console for errors
-
-## License
-
-ISC
-
-## Support
-
-For issues or questions:
-1. Check the troubleshooting section
-2. Review Supabase documentation
-3. Check Next.js documentation
+Para soporte, contacta a: support@quantor.com
 
 ---
 
-Built with ❤️ for modern people counting analytics
+Desarrollado con ❤️ por Quantor

@@ -33,7 +33,7 @@ export default function ProfilePage() {
 
     if (profile) {
       setUser(profile)
-      setFullName(profile.full_name || '')
+      setFullName((profile as any).full_name || '')
     }
     setLoading(false)
   }
@@ -41,8 +41,8 @@ export default function ProfilePage() {
   async function handleSave() {
     setSaving(true)
     try {
-      const { error } = await supabase
-        .from('profiles')
+      const { error } = await (supabase
+        .from('profiles') as any)
         .update({ full_name: fullName })
         .eq('id', user.id)
 
@@ -146,15 +146,15 @@ export default function ProfilePage() {
                 Rol
               </label>
               <div className="px-4 py-2 bg-muted border border-input rounded-lg flex items-center gap-2">
-                {user?.role === 'admin' && <Shield className="h-4 w-4 text-primary" />}
+                {(user as any)?.role === 'admin' && <Shield className="h-4 w-4 text-primary" />}
                 <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                  user?.role === 'admin' 
+                  (user as any)?.role === 'admin' 
                     ? 'bg-primary/10 text-primary' 
                     : 'bg-secondary text-secondary-foreground'
                 }`}>
-                  {user?.role === 'admin' ? 'Administrador' : 'Cliente'}
+                  {(user as any)?.role === 'admin' ? 'Administrador' : 'Cliente'}
                 </span>
-                {user?.role === 'admin' && (
+                {(user as any)?.role === 'admin' && (
                   <span className="text-xs text-muted-foreground ml-auto">
                     Acceso completo al sistema
                   </span>

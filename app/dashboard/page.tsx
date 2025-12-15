@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-client'
-import Dashboard from '../page'
+import Dashboard from '@/components/Dashboard'
 import { User } from 'lucide-react'
 
 export default function ClientDashboard() {
@@ -45,7 +45,7 @@ export default function ClientDashboard() {
             email: authUser.email || '',
             full_name: authUser.user_metadata?.full_name || null,
             role: 'client',
-          })
+          } as any)
         if (insertError) {
           console.error('Error creating profile:', insertError)
         } else {
@@ -55,7 +55,7 @@ export default function ClientDashboard() {
             .select('id, email, full_name, role, created_at')
             .eq('id', authUser.id)
             .single()
-          if (newProfile?.role === 'admin') {
+          if ((newProfile as any)?.role === 'admin') {
             router.push('/admin')
             return
           }
@@ -68,9 +68,9 @@ export default function ClientDashboard() {
       return
     }
 
-    console.log('User profile:', { email: profile?.email, role: profile?.role })
+    console.log('User profile:', { email: (profile as any)?.email, role: (profile as any)?.role })
 
-    if (profile?.role === 'admin') {
+    if ((profile as any)?.role === 'admin') {
       console.log('User is admin, redirecting to /admin')
       router.push('/admin')
       router.refresh()
@@ -90,6 +90,6 @@ export default function ClientDashboard() {
   }
 
   // Render the main dashboard but filtered by client's stores
-  return <Dashboard clientId={user?.id} />
+  return <Dashboard clientId={user?.id || undefined} />
 }
 

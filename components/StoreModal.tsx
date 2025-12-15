@@ -41,14 +41,14 @@ export default function StoreModal({ isOpen, onClose, store, onSuccess }: StoreM
     try {
       if (store) {
         // Update existing store
-        const { error: updateError } = await supabase
-          .from('stores')
+        const { error: updateError } = await (supabase
+          .from('stores') as any)
           .update({
             name,
             location,
             sensor_id: sensorId || null,
           })
-          .eq('id', store.id)
+          .eq('id', (store as any).id)
 
         if (updateError) throw updateError
       } else {
@@ -59,7 +59,7 @@ export default function StoreModal({ isOpen, onClose, store, onSuccess }: StoreM
             name,
             location,
             sensor_id: sensorId || null,
-          })
+          } as any)
 
         if (insertError) throw insertError
       }

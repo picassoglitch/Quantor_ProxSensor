@@ -66,7 +66,7 @@ export default function LoginPage() {
               email: data.user.email || email,
               full_name: data.user.user_metadata?.full_name || null,
               role: 'client',
-            })
+            } as any)
 
           if (insertError) {
             console.error('Error creating profile:', insertError)
@@ -80,14 +80,14 @@ export default function LoginPage() {
             .single()
 
           // Redirect based on role
-          if (newProfile?.role === 'admin') {
+          if ((newProfile as any)?.role === 'admin') {
             router.push('/admin')
           } else {
             router.push('/dashboard')
           }
         } else {
           // Redirect based on role
-          if (profile?.role === 'admin') {
+          if ((profile as any)?.role === 'admin') {
             router.push('/admin')
           } else {
             router.push('/dashboard')

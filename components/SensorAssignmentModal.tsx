@@ -55,10 +55,10 @@ export default function SensorAssignmentModal({ isOpen, onClose, sensor, onSucce
 
       if (stores && stores.length > 0) {
         // Update store's client_id
-        const { error: updateError } = await supabase
-          .from('stores')
+        const { error: updateError } = await (supabase
+          .from('stores') as any)
           .update({ client_id: selectedClient || null })
-          .eq('id', stores[0].id)
+          .eq('id', (stores[0] as any).id)
 
         if (updateError) throw updateError
       } else {
@@ -70,7 +70,7 @@ export default function SensorAssignmentModal({ isOpen, onClose, sensor, onSucce
             location: sensor.location,
             sensor_id: sensor.sensor_id,
             client_id: selectedClient || null,
-          })
+          } as any)
 
         if (insertError) throw insertError
       }

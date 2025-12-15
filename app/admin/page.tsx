@@ -10,7 +10,7 @@ import UserModal from '@/components/UserModal'
 import StoreModal from '@/components/StoreModal'
 import AssignmentModal from '@/components/AssignmentModal'
 import SensorAssignmentModal from '@/components/SensorAssignmentModal'
-import Dashboard from '@/app/page'
+import Dashboard from '@/components/Dashboard'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -609,7 +609,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     </div>
-                    <Dashboard clientId={selectedClientId} />
+                    <Dashboard clientId={selectedClientId || undefined} />
                   </div>
                 ) : (
                   // Show clients list
