@@ -35,16 +35,22 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Public routes
-  const publicRoutes = ['/auth/login', '/auth/signup']
+  // Public routes (only auth pages)
+  const publicRoutes = ['/auth/login', '/auth/signup', '/auth/reset-password']
   const isPublicRoute = publicRoutes.some(route => request.nextUrl.pathname.startsWith(route))
+  const isRootPath = request.nextUrl.pathname === '/'
 
-  // If not logged in and trying to access protected route
+  // If not logged in and trying to access protected route (including root)
   if (!user && !isPublicRoute) {
     return NextResponse.redirect(new URL('/auth/login', request.url))
   }
 
-  // If logged in and trying to access auth pages
+  // If not logged in and on root path, redirect to login
+  if (!user && isRootPath) {
+    return NextResponse.redirect(new URL('/auth/login', request.url))
+  }
+
+  // If logged in and trying to access auth pages, redirect to appropriate dashboard
   if (user && isPublicRoute) {
     // Get user role
     const { data: profile } = await supabase
@@ -73,8 +79,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Redirect admins from root to admin panel
-  if (user && request.nextUrl.pathname === '/') {
+  // Redirect from root to appropriate dashboard based on role
+  if (user && isRootPath) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
