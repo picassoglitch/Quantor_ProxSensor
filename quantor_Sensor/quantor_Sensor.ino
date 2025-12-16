@@ -654,13 +654,8 @@ void uploadData() {
   
   if (activeCount == 0) return;
   
-  // Add aggregated marketing metrics
-  doc["metrics"] = JsonObject();
-  doc["metrics"]["avg_distance_m"] = totalDistance / distanceCount;
-  doc["metrics"]["min_distance_m"] = minDistance;
-  doc["metrics"]["max_distance_m"] = maxDistance;
-  doc["metrics"]["active_devices"] = activeCount;
-  doc["metrics"]["total_devices_tracked"] = deviceCount;
+  // Note: Aggregated metrics are calculated per device in the devices array
+  // The dashboard can aggregate these metrics from the devices data
   
   String payload;
   serializeJson(doc, payload);
