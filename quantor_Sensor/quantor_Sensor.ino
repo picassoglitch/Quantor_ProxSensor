@@ -593,9 +593,8 @@ void uploadData() {
   doc["sensor_id"] = SENSOR_ID;
   doc["location"] = LOCATION_NAME;
   doc["wifi_rssi"] = WiFi.RSSI();
-  doc["uptime_seconds"] = (millis() - sensorStartTime) / 1000;
-  doc["total_detections"] = stats.total_detections;
-  doc["sensor_health"] = "operational";
+  // Note: Removed uptime_seconds, total_detections, sensor_health as they're not in the schema
+  // These can be calculated from the detections data in the dashboard
   
   if (CLIENT_ID.length() > 0) {
     doc["client_id"] = CLIENT_ID;
